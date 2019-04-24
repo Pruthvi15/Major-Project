@@ -7,6 +7,7 @@ import glob
 import os
 import RPi.GPIO as GPIO
 import time
+os.chdir("darkflow/")
 GPIO.setmode(GPIO.BCM)
 TRIG=23
 ECHO=24
@@ -50,5 +51,6 @@ try:
         engine.say("centimeters")
         engine.runAndWait()
 except KeyboardInterrupt:
+    GPIO.cleanup()
     camera.stop_preview()
     pass
