@@ -97,10 +97,7 @@ def postprocess(self, net_out, im, save = True):
 		left, right, top, bot, mess, max_indx, confidence = boxResults
 		thick = int((h + w) // 300)
 		if self.FLAGS.json:
-			resultsForJSON[mess]=resultsForJSON.get(mess, 0) + 1
-			continue
-
-		cv2.rectangle(imgcv,
+			resultsForJSON.append.rectangle(imgcv,
 			(left, top), (right, bot),
 			self.meta['colors'][max_indx], thick)
 		cv2.putText(
@@ -115,7 +112,7 @@ def postprocess(self, net_out, im, save = True):
 	img_name = os.path.join(outfolder, os.path.basename(im))
 	if self.FLAGS.json:
 		textJSON = json.dumps(resultsForJSON)
-		textFile = os.path.splitext(img_name)[0] + ".txt"
+		textFile = os.path.splitext(img_name)[0] + ".json"
 		with open(textFile, 'w') as f:
 			f.write(textJSON)
 		return	

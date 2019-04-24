@@ -76,6 +76,8 @@ def camera(self):
         'file {} does not exist'.format(file)
         
     camera = cv2.VideoCapture(file)
+    #camera.set(3,400)
+    #camera.set(4,400)
     
     if file == 0:
         self.say('Press [ESC] to quit demo')

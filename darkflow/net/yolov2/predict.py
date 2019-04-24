@@ -40,7 +40,7 @@ def postprocess(self, net_out, im, save = True):
 	else: imgcv = im
 	h, w, _ = imgcv.shape
 	
-	resultsForJSON = []
+	resultsForJSON = {}
 	for b in boxes:
 		boxResults = self.process_box(b, h, w, threshold)
 		if boxResults is None:
@@ -48,7 +48,7 @@ def postprocess(self, net_out, im, save = True):
 		left, right, top, bot, mess, max_indx, confidence = boxResults
 		thick = int((h + w) // 300)
 		if self.FLAGS.json:
-			resultsForJSON.append({"label": mess, "confidence": float('%.2f' % confidence), "topleft": {"x": left, "y": top}, "bottomright": {"x": right, "y": bot}})
+			resultsForJSON[mess]=resultsForJSON.get(mess, 0)+1
 			continue
 
 		cv2.rectangle(imgcv,
@@ -63,7 +63,7 @@ def postprocess(self, net_out, im, save = True):
 	img_name = os.path.join(outfolder, os.path.basename(im))
 	if self.FLAGS.json:
 		textJSON = json.dumps(resultsForJSON)
-		textFile = os.path.splitext(img_name)[0] + ".json"
+		textFile = os.path.splitext(img_name)[0] + ".txt"
 		with open(textFile, 'w') as f:
 			f.write(textJSON)
 		return

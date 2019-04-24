@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 import pickle
 from multiprocessing.pool import ThreadPool
+import picamera
 
 train_stats = (
     'Training statistics: \n'
@@ -84,26 +85,24 @@ def return_predict(self, im):
     out = self.sess.run(self.out, feed_dict)[0]
     boxes = self.framework.findboxes(out)
     threshold = self.FLAGS.threshold
-    boxesInfo = list()
+    boxesInfo = {}
     for box in boxes:
         tmpBox = self.framework.process_box(box, h, w, threshold)
         if tmpBox is None:
             continue
-        boxesInfo.append({
-            "label": tmpBox[4],
-            "confidence": tmpBox[6],
-            "topleft": {
-                "x": tmpBox[0],
-                "y": tmpBox[2]},
-            "bottomright": {
-                "x": tmpBox[1],
-                "y": tmpBox[3]}
-        })
+        boxesInfo[tmpBox[4]]=boxesInfo.get(tmpBox[4],0)+1
     return boxesInfo
 
 import math
 
 def predict(self):
+   # with picamera.PiCamera() as camera:
+    #   camera.resolution = (800,600)
+     #   camera.start_preview()
+      #  time.sleep(2)
+       # os.chdir("/home/darkflow/sample_img/")
+        #camera.capture("a.jpg")
+        #os.chdir("/home/darkflow/darkflow/net")
     inp_path = self.FLAGS.imgdir
     all_inps = os.listdir(inp_path)
     all_inps = [i for i in all_inps if self.framework.is_inp(i)]
